@@ -17,10 +17,29 @@ class App extends Component {
       this.state = {
         show: false,
         value : '',
+        data:[],
         ar:['ad','dadd','k']
       };
     }
 
+  componentDidMount(){
+
+      fetch('http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=0x493aBFb2aC57BE6a28FaC1d88E1686ABfdE25D55&startblock=4074464&endblock=4104999&sort=asc&apikey=CIWB7GRWS8FIJV242NHQUGXBN3QPW4QQTJ&c=json',
+      {
+    },
+    ).then(response => {
+      if (response.ok) {
+        response.json().then(json => {
+
+            this.setState({ data: json.result});
+        
+          console.log(json,json.result[0].blockHash,json.result[1].blockHash);
+        });
+      }
+    });
+    }
+
+  
 
       handleClose() {
         this.setState({ show: false });
@@ -122,48 +141,29 @@ onChange = {event => this.setState({value : event.target.value})}>
 
 <div >
   <div class="column" style={{backgroundColor:"#f0f0f0"}} id ="rcorners2">
-  <table id="customers">
+ 
+      <table id="customers">
   <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
+    <th>BlockHash</th>
+     <th>Time Stamp</th>
+     <th>Block Number</th>
+     <th>Gas Used</th>
+     <th>Sent To</th>
   </tr>
-  <tr>
-    <td>Alfreds </td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-    <td>Alfreds </td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Berglunds </td>
-    <td>Christina </td>
-    <td>Sweden</td>
-    <td>Berglunds </td>
-    <td>Christina </td>
-    <td>Sweden</td>
-  </tr>
-  <tr>
-    <td>Centro  </td>
-    <td>Francisco </td>
-    <td>Mexico</td>
-    <td>Centro  </td>
-    <td>Francisco </td>
-    <td>Mexico</td>
-  </tr>
-  <tr>
-    <td>Ernst </td>
-    <td>Roland </td>
-    <td>Austria</td>
-    <td>Ernst </td>
-    <td>Roland </td>
-    <td>Austria</td>
-  </tr>
+  {(this.state.data).map((post,index)=>{
+  return(<tr>
+    <th>{post.blockHash}</th>
+    <th>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(post.timeStamp*1000)}</th>
+    <th>{post.blockNumber}</th>
+    <th>{post.gasUsed}</th>
+    <th>{post.to}</th>
+    </tr>
+  )
 
+  }
+
+  )
+  }
 
 
 </table>
