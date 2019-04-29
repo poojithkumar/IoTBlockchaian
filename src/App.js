@@ -17,14 +17,22 @@ class App extends Component {
       this.state = {
         show: false,
         value : '',
+        apiKey:"CIWB7GRWS8FIJV242NHQUGXBN3QPW4QQTJ",
+        add:"0x493aBFb2aC57BE6a28FaC1d88E1686ABfdE25D55",
         data:[],
         ar:['ad','dadd','k']
       };
     }
 
   componentDidMount(){
+    let base='http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=';
+let addr=this.state.add;
+let mid='&startblock=0&endblock=9999999&sort=asc&apikey=';
+let end=this.state.apiKey;
+let url=base+addr+mid+end+'&c=json';
 
-      fetch('http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=0x493aBFb2aC57BE6a28FaC1d88E1686ABfdE25D55&startblock=4074464&endblock=4104999&sort=asc&apikey=CIWB7GRWS8FIJV242NHQUGXBN3QPW4QQTJ&c=json',
+
+      fetch(url,
       {
     },
     ).then(response => {
